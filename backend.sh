@@ -39,17 +39,23 @@ VALIDATE $? "Enabling NodeJS 20"
 
 dnf install nodejs -y &>>LOG_FILE_NAME
 VALIDATE $? "Installing NoseJS"
-
+id expense &>>LOG_FILE_NAME
+if [ $? -ne 0 ]
+then
 useradd expense &>>LOG_FILE_NAME
 VALIDATE $? "Addind expenseuser"
+else
+echo "expense user already exist.....$Y SKIPPING $N"
+fi
 
-mkdir /app &>>LOG_FILE_NAME
+mkdir  -p /app &>>LOG_FILE_NAME
 VALIDATE $? "Creating App Directory"
 
 curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>LOG_FILE_NAME
 VALIDATE $? "Dowloading backend zip code"
 
 cd /app
+rm -rf /app/*
 
 unzip /tmp/backend.zip &>>LOG_FILE_NAME
 VALIDATE $? "Unzip backend"
