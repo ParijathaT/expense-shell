@@ -30,7 +30,7 @@ CHECK_ROOT(){
 echo "script started executing at:$TIMESTAMP" &>>LOG_FILE_NAME
 
 CHECK_ROOT
-dnf install nginx -y  &>>$LOG_FILE_NAME
+dnf install nginx -y &>>$LOG_FILE_NAME
 VALIDATE $? "Installing Nginx Server"
 
 systemctl enable nginx &>>$LOG_FILE_NAME
