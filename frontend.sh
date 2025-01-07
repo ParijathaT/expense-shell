@@ -30,3 +30,29 @@ CHECK_ROOT(){
 echo "script started executing at:$TIMESTAMP" &>>LOG_FILE_NAME
 
 CHECK_ROOT
+dnf install nginx -y  &>>$LOG_FILE_NAME
+VALIDATE $? "Installing Nginx Server"
+
+systemctl enable nginx &>>$LOG_FILE_NAME
+VALIDATE $? "Enabling Nginx server"
+
+systemctl start nginx &>>$LOG_FILE_NAME
+VALIDATE $? "Starting Nginx Server"
+
+rm -rf /usr/share/nginx/html/* &>>$LOG_FILE_NAME
+VALIDATE $? "Removing existing version of code"
+
+curl -o /tmp/frontend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip &>>$LOG_FILE_NAME
+VALIDATE $? "Downloading Latest code"
+
+cd /usr/share/nginx/html
+VALIDATE $? "Moving to HTML directory"
+
+unzip /tmp/frontend.zip &>>$LOG_FILE_NAME
+VALIDATE $? "unzipping the frontend code"
+
+cp /home/ec2-user/expense-shell/expense.conf /etc/nginx/default.d/expense.conf
+VALIDATE $? "Copied expense config"
+
+systemctl restart nginx &>>$LOG_FILE_NAME
+VALIDATE $? "Restarting nginx"
