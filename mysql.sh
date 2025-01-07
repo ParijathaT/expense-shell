@@ -40,8 +40,8 @@ systemctl start mysqld &>>LOG_FILE_NAME
 VALIDATE $? "Starting MYSQL Server"
 
 mysql -h mysql.parijathapractice.onlne -u root -pExpenseApp@1 -e 'show databases;' &>>LOG_FILE_NAME
- 
-if [$? -ne 0 ]
+
+if [ $? -ne 0 ]
 then
 echo "MYSQL Root passwrd not setup" &>>LOG_FILE_NAME
 
